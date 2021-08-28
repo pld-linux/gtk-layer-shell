@@ -1,3 +1,7 @@
+#
+# Conditional build:
+%bcond_without	apidocs	# API documentation
+
 Summary:	Library to create components for Wayland using the Layer Shell
 Summary(pl.UTF-8):	Biblioteka do tworzenia komponentów Waylanda przy użyciu protokołu Layer Shell
 Name:		gtk-layer-shell
@@ -11,10 +15,12 @@ Source0:	https://github.com/wmww/gtk-layer-shell/archive/v%{version}/%{name}-%{v
 URL:		https://github.com/wmww/gtk-layer-shell
 BuildRequires:	gcc >= 6:4.7
 BuildRequires:	gtk+3-devel >= 3.22.0
+%{?with_apidocs:BuildRequires:	gtk-doc}
 BuildRequires:	meson >= 0.45.1
 BuildRequires:	ninja >= 1.5
 BuildRequires:	pkgconfig
 BuildRequires:	python3 >= 1:3
+BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.736
 BuildRequires:	wayland-devel >= 1.10.0
 BuildRequires:	wayland-protocols >= 1.16
@@ -68,11 +74,24 @@ Static gtk-layer-shell library.
 %description static -l pl.UTF-8
 Biblioteka statyczna gtk-layer-shell.
 
+%package apidocs
+Summary:	API documentation for gtk-layer-shell library
+Summary(pl.UTF-8):	Dokumentacja API biblioteki gtk-layer-shell
+Group:		Documentation
+BuildArch:	noarch
+
+%description apidocs
+API documentation for gtk-layer-shell library.
+
+%description apidocs -l pl.UTF-8
+Dokumentacja API biblioteki gtk-layer-shell.
+
 %prep
 %setup -q
 
 %build
-%meson build
+%meson build \
+	%{?with_apidocs:-Ddocs=true}
 
 %ninja_build -C build
 
@@ -105,3 +124,9 @@ rm -rf $RPM_BUILD_ROOT
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libgtk-layer-shell.a
+
+%if %{with apidocs}
+%files apidocs
+%defattr(644,root,root,755)
+%{_gtkdocdir}/gtk-layer-shell
+%endif
