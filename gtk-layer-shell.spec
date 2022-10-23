@@ -1,17 +1,18 @@
 #
 # Conditional build:
 %bcond_without	apidocs	# API documentation
+%bcond_without	vala	# Vala API
 
 Summary:	Library to create components for Wayland using the Layer Shell
 Summary(pl.UTF-8):	Biblioteka do tworzenia komponentów Waylanda przy użyciu protokołu Layer Shell
 Name:		gtk-layer-shell
-Version:	0.7.0
+Version:	0.8.0
 Release:	1
 License:	LGPL v3+, MIT
 Group:		Libraries
 #Source0Download: https://github.com/wmww/gtk-layer-shell/releases
 Source0:	https://github.com/wmww/gtk-layer-shell/archive/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	d6edf452c8b2e74f44bd6a1057581356
+# Source0-md5:	64a5a6a0128ec20d441c01be1d112687
 URL:		https://github.com/wmww/gtk-layer-shell
 BuildRequires:	gcc >= 6:4.7
 BuildRequires:	gtk+3-devel >= 3.22.0
@@ -24,6 +25,7 @@ BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.736
 BuildRequires:	wayland-devel >= 1.10.0
 BuildRequires:	wayland-protocols >= 1.16
+%{?with_vala:BuildRequires:	vala}
 Requires:	gtk+3 >= 3.22.0
 Requires:	wayland >= 1.10.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -86,12 +88,27 @@ API documentation for gtk-layer-shell library.
 %description apidocs -l pl.UTF-8
 Dokumentacja API biblioteki gtk-layer-shell.
 
+%package -n vala-gtk-layer-shell
+Summary:	gtk-layer-shell API for Vala language
+Summary(pl.UTF-8):	API gtk-layer-shell dla języka Vala
+Group:		Development/Libraries
+Requires:	%{name}-devel = %{version}-%{release}
+Requires:	vala
+BuildArch:	noarch
+
+%description -n vala-gtk-layer-shell
+gtk-layer-shell API for Vala language.
+
+%description -n vala-gtk-layer-shell -l pl.UTF-8
+API gtk-layer-shell dla języka Vala.
+
 %prep
 %setup -q
 
 %build
 %meson build \
-	%{?with_apidocs:-Ddocs=true}
+	%{?with_apidocs:-Ddocs=true} \
+	-Dvapi=%{__true_false vala}
 
 %ninja_build -C build
 
@@ -129,4 +146,11 @@ rm -rf $RPM_BUILD_ROOT
 %files apidocs
 %defattr(644,root,root,755)
 %{_gtkdocdir}/gtk-layer-shell
+%endif
+
+%if %{with vala}
+%files -n vala-gtk-layer-shell
+%defattr(644,root,root,755)  
+%{_datadir}/vala/vapi/gtk-layer-shell-0.deps
+%{_datadir}/vala/vapi/gtk-layer-shell-0.vapi
 %endif
