@@ -15,6 +15,7 @@ Source0:	https://github.com/wmww/gtk-layer-shell/archive/v%{version}/%{name}-%{v
 # Source0-md5:	64a5a6a0128ec20d441c01be1d112687
 URL:		https://github.com/wmww/gtk-layer-shell
 BuildRequires:	gcc >= 6:4.7
+BuildRequires:	gobject-introspection-devel
 BuildRequires:	gtk+3-devel >= 3.22.0
 %{?with_apidocs:BuildRequires:	gtk-doc}
 BuildRequires:	meson >= 0.45.1
