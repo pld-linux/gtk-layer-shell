@@ -1,7 +1,8 @@
 #
 # Conditional build:
-%bcond_without	apidocs	# API documentation
-%bcond_without	vala	# Vala API
+%bcond_without	apidocs		# API documentation
+%bcond_without	static_libs	# static library
+%bcond_without	vala		# Vala API
 
 Summary:	Library to create components for Wayland using the Layer Shell
 Summary(pl.UTF-8):	Biblioteka do tworzenia komponentów Waylanda przy użyciu protokołu Layer Shell
@@ -108,6 +109,7 @@ API gtk-layer-shell dla języka Vala.
 
 %build
 %meson build \
+	%{!?with_static_libs:--default-library=shared} \
 	%{?with_apidocs:-Ddocs=true} \
 	-Dvapi=%{__true_false vala}
 
@@ -139,9 +141,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_pkgconfigdir}/gtk-layer-shell-0.pc
 %{_datadir}/gir-1.0/GtkLayerShell-0.1.gir
 
+%if %{with static_libs}
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libgtk-layer-shell.a
+%endif
 
 %if %{with apidocs}
 %files apidocs
