@@ -7,13 +7,13 @@
 Summary:	Library to create components for Wayland using the Layer Shell
 Summary(pl.UTF-8):	Biblioteka do tworzenia komponentów Waylanda przy użyciu protokołu Layer Shell
 Name:		gtk-layer-shell
-Version:	0.8.2
+Version:	0.9.0
 Release:	1
 License:	LGPL v3+, MIT
 Group:		Libraries
 #Source0Download: https://github.com/wmww/gtk-layer-shell/releases
 Source0:	https://github.com/wmww/gtk-layer-shell/archive/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	454ea23f83213d5692ce808487ab1187
+# Source0-md5:	8b1e70d2de4b625e3e337c3f269f2119
 URL:		https://github.com/wmww/gtk-layer-shell
 BuildRequires:	gcc >= 6:4.7
 BuildRequires:	gobject-introspection-devel
