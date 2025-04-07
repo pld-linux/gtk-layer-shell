@@ -24,7 +24,7 @@ BuildRequires:	ninja >= 1.5
 BuildRequires:	pkgconfig
 BuildRequires:	python3 >= 1:3
 BuildRequires:	rpm-build >= 4.6
-BuildRequires:	rpmbuild(macros) >= 1.736
+BuildRequires:	rpmbuild(macros) >= 2.042
 BuildRequires:	wayland-devel >= 1.10.0
 BuildRequires:	wayland-protocols >= 1.16
 %{?with_vala:BuildRequires:	vala}
@@ -108,17 +108,17 @@ API gtk-layer-shell dla języka Vala.
 %setup -q
 
 %build
-%meson build \
+%meson \
 	%{!?with_static_libs:--default-library=shared} \
 	%{?with_apidocs:-Ddocs=true} \
 	-Dvapi=%{__true_false vala}
 
-%ninja_build -C build
+%meson_build
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%ninja_install -C build
+%meson_install
 
 %clean
 rm -rf $RPM_BUILD_ROOT
